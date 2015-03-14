@@ -245,7 +245,7 @@ Calculate mean
 ```r
 steps_mean_compl<-mean(activity_data_freq$steps, na.rm=T)
 ```
-The mean is 10708.18 steps.
+The mean is 10776.89 steps.
 
 Calculate median
 
