@@ -1,25 +1,11 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 ### Prerequisites
-```{r, include=FALSE, cache=FALSE}
-library(dplyr)
-library(lubridate)
-library(ggplot2)
-library(plyr)
-library(knitr)
-library(xtable)
 
-opts_chunk$set(echo=TRUE)
-fig_path(".png", list(fig.path = "foo-", label = "bar"), 1:10)
-```
 
 #### Set system locale to (US) English
-```{r, results='hide'}
+
+```r
 Sys.setlocale("LC_TIME", "C")
 ```
 
@@ -29,17 +15,20 @@ Sys.setlocale("LC_TIME", "C")
 - Source: https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip
 - Date downloaded: Mar 4th 2015
 
-```{r}
+
+```r
 activity_data<-read.csv("activity.csv", header=TRUE)
 ```
 
 #### Add row id to data frame
-```{r}
+
+```r
 activity_data$ID<-seq.int(nrow(activity_data))
 ```
 
 Format date column as proper date and column steps as numeric
-```{r}
+
+```r
 activity_data$date<-ymd(activity_data$date)
 activity_data$steps<-as.numeric(activity_data$steps)
 ```
@@ -47,20 +36,19 @@ activity_data$steps<-as.numeric(activity_data$steps)
 #### Total number of steps taken per day
 
 Group data frame by date and calculate frequency
-```{r}
+
+```r
 activity_data_freq<-aggregate(x = activity_data[c("steps")],
           FUN = sum, na.rm=TRUE,
           by = list(group.date = activity_data$date))
 ```
 
 List of total number of steps taken per day:
-```{r, echo=FALSE, results="asis", include=FALSE, cache=FALSE}
-xt<-xtable(activity_data_freq)
-print(xt, type="html")
-```
+
 
 #### Histogram of the total number of steps taken each day
-```{r}
+
+```r
 g<-ggplot(activity_data_freq, aes(x=steps)) + 
     geom_histogram(binwidth=2000, colour="black", fill="lightblue") +
     geom_vline(aes(xintercept=mean(steps, na.rm=T)), colour="red", linetype="dashed", size=1) + 
@@ -71,8 +59,11 @@ g<-ggplot(activity_data_freq, aes(x=steps)) +
     ylab("Frequency")
 
     plot(g)
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
 
+```r
 ## Export plot to png file
 #dev.copy(png,file="figures/Hist_1.png",width=480,height=480,res=72)
 ## Close file device
@@ -82,20 +73,23 @@ g<-ggplot(activity_data_freq, aes(x=steps)) +
 ### Mean and median of the total number of steps taken per day
 
 Calculate mean
-```{r}
+
+```r
 steps_mean<-mean(activity_data_freq$steps, na.rm=T)
 ```
-The mean is `r format(round(steps_mean, 2), nsmall = 2)` steps.
+The mean is 9354.23 steps.
 
 Calculate median
-```{r}
+
+```r
 steps_median<-median(activity_data_freq$steps, na.rm=T)
 ```
-The median is `r format(round(steps_median, 2), nsmall = 2)` steps.
+The median is 10395.00 steps.
 
 
 ### Time series plot of the 5-minute interval and the average number of steps taken, averaged across all days.
-```{r}
+
+```r
 activity_data_mean_date<-aggregate(x = activity_data[c("steps")],
                               FUN = mean, na.rm=TRUE,
                               by = activity_data[c("interval")])
@@ -109,7 +103,11 @@ ggplot(timeseries, aes(interval, steps)) +
     ylab("Avg. no. of steps per 5-minute time interval") +
     ggtitle("Average number of steps taken over 5-minute intervals") +
     geom_vline(aes(xintercept=max_interval), color="darkred", linetype="dashed", size=1) 
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+
+```r
 ## Export plot to png file
 #dev.copy(png,file="figures/Timeseries.png",width=480,height=480,res=72)
 ## Close file device
@@ -117,15 +115,16 @@ ggplot(timeseries, aes(interval, steps)) +
 ```
 
 ####5-minute interval containing maximum number of steps
-The 5-minute interval, on average across all the days in the dataset, with maximum number of steps is `r format(round(max_interval, 0), nsmall = 2)`.
+The 5-minute interval, on average across all the days in the dataset, with maximum number of steps is 835.00.
 
 #### Calculate the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-```{r}
+
+```r
 activity_data_NA<-filter(activity_data,is.na(steps)==TRUE)
 NoNAs<-nrow(activity_data_NA)
 ```
 
-The total number of missing values in the data column "steps" id `r NoNAs`.
+The total number of missing values in the data column "steps" id 2304.
 
 ### Imputing missing data
 In the dataset column "steps" we have missing. Therefor, we execute two different methods of data imputation: mean imputation and random sample imputation.
@@ -134,7 +133,8 @@ In the dataset column "steps" we have missing. Therefor, we execute two differen
 Perhaps the easiest way to impute is to replace each missing value with the mean of the observed values for that variable. One has to be careful, because this strategy can severely distort the distribution for this variable.
 
 Calculating the means of 5-minute intervals 
-```{r}
+
+```r
 activity_data_mean_date<-aggregate(x = activity_data[c("steps")],
                               FUN = mean, na.rm=TRUE,
                               by = activity_data[c("interval")])
@@ -147,14 +147,16 @@ colnames(activity_data_compl)[2] <- "steps"
 ```
 
 Aggregate data
-```{r}
+
+```r
 activity_data_freq_compl<-aggregate(x = activity_data_compl[c("steps")],
                                     FUN = sum, na.rm=TRUE,
                                     by = list(group.date = activity_data_compl$date))
 ```
 
 Plot result of imputation
-```{r}
+
+```r
 ggplot(activity_data_freq_compl, aes(x=steps)) + 
     geom_histogram(binwidth=2000, colour="black", fill="lightblue") +
     geom_vline(aes(xintercept=mean(steps, na.rm=T)), color="red", linetype="dashed", size=1) + 
@@ -162,7 +164,11 @@ ggplot(activity_data_freq_compl, aes(x=steps)) +
     ggtitle("Histogram of the total number of steps taken each day") +
     xlab("Steps") + 
     ylab("Frequency")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-15-1.png) 
+
+```r
 ## Export plot to png file
 #dev.copy(png,file="figures/Hist_2.png",width=480,height=480,res=72)
 ## Close file device
@@ -170,16 +176,18 @@ ggplot(activity_data_freq_compl, aes(x=steps)) +
 ```
 
 Calculate mean
-```{r}
+
+```r
 steps_mean_compl<-mean(activity_data_freq_compl$steps, na.rm=T)
 ```
-The mean is `r format(round(steps_mean_compl, 2), nsmall = 2)` steps.
+The mean is 10766.19 steps.
 
 Calculate median
-```{r}
+
+```r
 steps_median_compl<-median(activity_data_freq_compl$steps, na.rm=T)
 ```
-The median is `r format(round(steps_median_compl, 2), nsmall = 2)` steps.
+The median is 10766.19 steps.
 
 The strategy of imputing mean values can distort the distribution for this variable, leading to complications with summary measures including, notably, underestimates of the standard.
 
@@ -189,7 +197,8 @@ data for this variable. We use randomimp to create a completed data vector of th
 imputing random draws into the missing values of the original steps column. 
 
 Draw random samples from  5-minute interval data
-```{r}
+
+```r
 randomimp <- function (a){
     
     n<-length(a[is.na(a)])
@@ -203,14 +212,16 @@ activity_data[,1]<-activity_data_sample
 ```
 
 Aggregate data
-```{r}
+
+```r
 activity_data_freq<-aggregate(x = activity_data[c("steps")],
                                      FUN = sum, na.rm=TRUE,
                                      by = list(group.date = activity_data$date))
 ```
 
 Plot result of imputation
-```{r}
+
+```r
 ggplot(activity_data_freq, aes(x=steps)) + 
     geom_histogram(binwidth=2000, colour="black", fill="lightblue") +
     geom_vline(aes(xintercept=mean(steps, na.rm=T)), color="red", linetype="dashed", size=1) + 
@@ -218,7 +229,11 @@ ggplot(activity_data_freq, aes(x=steps)) +
     ggtitle("Histogram of the total number of steps taken each day") +
     xlab("Steps") + 
     ylab("Frequency")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-20-1.png) 
+
+```r
 ## Export plot to png file
 #dev.copy(png,file="figures/Hist_3.png",width=480,height=480,res=72)
 ## Close file device
@@ -226,16 +241,18 @@ ggplot(activity_data_freq, aes(x=steps)) +
 ```
 
 Calculate mean
-```{r}
+
+```r
 steps_mean_compl<-mean(activity_data_freq$steps, na.rm=T)
 ```
-The mean is `r format(round(steps_mean_compl, 2), nsmall = 2)` steps.
+The mean is 10708.18 steps.
 
 Calculate median
-```{r}
+
+```r
 steps_median_compl<-median(activity_data_freq$steps, na.rm=T)
 ```
-The median is `r format(round(steps_median_compl, 2), nsmall = 2)` steps.
+The median is 10765.00 steps.
 
 #### Summary data imputation
 Generally the data imputation tends to bring mean and median closer together. In the case of the mean value imputation, both are identical. In the case of random sample imputation both mean and median are very close together. In both cases, however, the mean and median shift to higher values.
@@ -244,29 +261,35 @@ Generally the data imputation tends to bring mean and median closer together. In
 
 To anwer this quation we create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
-```{r}
+
+```r
 activity_data$dayofweek<-factor(weekdays(activity_data$date) %in% c('Saturday','Sunday'))
 levels(activity_data$dayofweek)[levels(activity_data$dayofweek)=="TRUE"] <- "weekday"
 levels(activity_data$dayofweek)[levels(activity_data$dayofweek)=="FALSE"] <- "weekend"
 ```
 
 Aggregate data
-```{r}
+
+```r
 activity_data_mean_date<-aggregate(x = activity_data[c("steps")],
                                    FUN = mean, na.rm=TRUE,
                                    by = activity_data[c("interval","dayofweek")])
-
 ```
 
 Plot result
-```{r}
+
+```r
 ggplot(activity_data_mean_date, aes(interval, steps)) + 
       geom_line(lwd=1, colour="darkblue") +
       xlab("5-minute time interval") + 
       ylab("Avg. steps") +
       ggtitle("Average number of steps taken over 5-minute intervals") +
       facet_grid(dayofweek ~ .)
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-25-1.png) 
+
+```r
 ## Export plot to png file
 #dev.copy(png,file="figures/Patterns.png",width=480,height=480,res=72)
 ## Close file device
