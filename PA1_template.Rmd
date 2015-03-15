@@ -71,12 +71,6 @@ g<-ggplot(activity_data_freq, aes(x=steps)) +
     ylab("Frequency")
 
     plot(g)
-
-
-## Export plot to png file
-#dev.copy(png,file="figures/Hist_1.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
 ```
 
 ### Mean and median of the total number of steps taken per day
@@ -85,13 +79,13 @@ Calculate mean
 ```{r}
 steps_mean<-mean(activity_data_freq$steps, na.rm=T)
 ```
-The mean is `r format(round(steps_mean, 2), nsmall = 2)` steps.
+The mean (red line on histogram above) is `r format(round(steps_mean, 2), nsmall = 2)` steps.
 
 Calculate median
 ```{r}
 steps_median<-median(activity_data_freq$steps, na.rm=T)
 ```
-The median is `r format(round(steps_median, 2), nsmall = 2)` steps.
+The median (purple line on histogram above) is `r format(round(steps_median, 2), nsmall = 2)` steps.
 
 
 ### Time series plot of the 5-minute interval and the average number of steps taken, averaged across all days.
@@ -109,15 +103,10 @@ ggplot(timeseries, aes(interval, steps)) +
     ylab("Avg. no. of steps per 5-minute time interval") +
     ggtitle("Average number of steps taken over 5-minute intervals") +
     geom_vline(aes(xintercept=max_interval), color="darkred", linetype="dashed", size=1) 
-
-## Export plot to png file
-#dev.copy(png,file="figures/Timeseries.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
 ```
 
 ####5-minute interval containing maximum number of steps
-The 5-minute interval, on average across all the days in the dataset, with maximum number of steps is `r format(round(max_interval, 0), nsmall = 2)`.
+The 5-minute interval, on average across all the days in the dataset, with maximum number of steps (red line on time series above) is `r format(round(max_interval, 0), nsmall = 2)`.
 
 #### Calculate the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 ```{r}
@@ -162,24 +151,19 @@ ggplot(activity_data_freq_compl, aes(x=steps)) +
     ggtitle("Histogram of the total number of steps taken each day") +
     xlab("Steps") + 
     ylab("Frequency")
-
-## Export plot to png file
-#dev.copy(png,file="figures/Hist_2.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
 ```
 
 Calculate mean
 ```{r}
 steps_mean_compl<-mean(activity_data_freq_compl$steps, na.rm=T)
 ```
-The mean is `r format(round(steps_mean_compl, 2), nsmall = 2)` steps.
+The mean is (red line on histogram above) `r format(round(steps_mean_compl, 2), nsmall = 2)` steps.
 
 Calculate median
 ```{r}
 steps_median_compl<-median(activity_data_freq_compl$steps, na.rm=T)
 ```
-The median is `r format(round(steps_median_compl, 2), nsmall = 2)` steps.
+The median is (purple line on histogram above) `r format(round(steps_median_compl, 2), nsmall = 2)` steps.
 
 The strategy of imputing mean values can distort the distribution for this variable, leading to complications with summary measures including, notably, underestimates of the standard.
 
@@ -218,24 +202,19 @@ ggplot(activity_data_freq, aes(x=steps)) +
     ggtitle("Histogram of the total number of steps taken each day") +
     xlab("Steps") + 
     ylab("Frequency")
-
-## Export plot to png file
-#dev.copy(png,file="figures/Hist_3.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
 ```
 
 Calculate mean
 ```{r}
 steps_mean_compl<-mean(activity_data_freq$steps, na.rm=T)
 ```
-The mean is `r format(round(steps_mean_compl, 2), nsmall = 2)` steps.
+The mean is (red line on histogram above) `r format(round(steps_mean_compl, 2), nsmall = 2)` steps.
 
 Calculate median
 ```{r}
 steps_median_compl<-median(activity_data_freq$steps, na.rm=T)
 ```
-The median is `r format(round(steps_median_compl, 2), nsmall = 2)` steps.
+The median (purple line on histogram above) is `r format(round(steps_median_compl, 2), nsmall = 2)` steps.
 
 #### Summary data imputation
 Generally the data imputation tends to bring mean and median closer together. In the case of the mean value imputation, both are identical. In the case of random sample imputation both mean and median are very close together. In both cases, however, the mean and median shift to higher values.
@@ -266,11 +245,6 @@ ggplot(activity_data_mean_date, aes(interval, steps)) +
       ylab("Avg. steps") +
       ggtitle("Average number of steps taken over 5-minute intervals") +
       facet_grid(dayofweek ~ .)
-
-## Export plot to png file
-#dev.copy(png,file="figures/Patterns.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
 ```
 
 The pattern during the weekend is more concentrated around interval 800. The pattern during the week is more spread out and shows several maxima.

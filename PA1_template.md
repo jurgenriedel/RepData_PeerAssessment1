@@ -63,13 +63,6 @@ g<-ggplot(activity_data_freq, aes(x=steps)) +
 
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
 
-```r
-## Export plot to png file
-#dev.copy(png,file="figures/Hist_1.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
-```
-
 ### Mean and median of the total number of steps taken per day
 
 Calculate mean
@@ -77,14 +70,14 @@ Calculate mean
 ```r
 steps_mean<-mean(activity_data_freq$steps, na.rm=T)
 ```
-The mean is 9354.23 steps.
+The mean (red line on histogram above) is 9354.23 steps.
 
 Calculate median
 
 ```r
 steps_median<-median(activity_data_freq$steps, na.rm=T)
 ```
-The median is 10395.00 steps.
+The median (purple line on histogram above) is 10395.00 steps.
 
 
 ### Time series plot of the 5-minute interval and the average number of steps taken, averaged across all days.
@@ -107,15 +100,8 @@ ggplot(timeseries, aes(interval, steps)) +
 
 ![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
 
-```r
-## Export plot to png file
-#dev.copy(png,file="figures/Timeseries.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
-```
-
 ####5-minute interval containing maximum number of steps
-The 5-minute interval, on average across all the days in the dataset, with maximum number of steps is 835.00.
+The 5-minute interval, on average across all the days in the dataset, with maximum number of steps (red line on time series above) is 835.00.
 
 #### Calculate the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
@@ -168,26 +154,19 @@ ggplot(activity_data_freq_compl, aes(x=steps)) +
 
 ![](PA1_template_files/figure-html/unnamed-chunk-15-1.png) 
 
-```r
-## Export plot to png file
-#dev.copy(png,file="figures/Hist_2.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
-```
-
 Calculate mean
 
 ```r
 steps_mean_compl<-mean(activity_data_freq_compl$steps, na.rm=T)
 ```
-The mean is 10766.19 steps.
+The mean is (red line on histogram above) 10766.19 steps.
 
 Calculate median
 
 ```r
 steps_median_compl<-median(activity_data_freq_compl$steps, na.rm=T)
 ```
-The median is 10766.19 steps.
+The median is (purple line on histogram above) 10766.19 steps.
 
 The strategy of imputing mean values can distort the distribution for this variable, leading to complications with summary measures including, notably, underestimates of the standard.
 
@@ -233,26 +212,19 @@ ggplot(activity_data_freq, aes(x=steps)) +
 
 ![](PA1_template_files/figure-html/unnamed-chunk-20-1.png) 
 
-```r
-## Export plot to png file
-#dev.copy(png,file="figures/Hist_3.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
-```
-
 Calculate mean
 
 ```r
 steps_mean_compl<-mean(activity_data_freq$steps, na.rm=T)
 ```
-The mean is 10776.89 steps.
+The mean is (red line on histogram above) 10774.93 steps.
 
 Calculate median
 
 ```r
 steps_median_compl<-median(activity_data_freq$steps, na.rm=T)
 ```
-The median is 10765.00 steps.
+The median (purple line on histogram above) is 10765.00 steps.
 
 #### Summary data imputation
 Generally the data imputation tends to bring mean and median closer together. In the case of the mean value imputation, both are identical. In the case of random sample imputation both mean and median are very close together. In both cases, however, the mean and median shift to higher values.
@@ -288,13 +260,6 @@ ggplot(activity_data_mean_date, aes(interval, steps)) +
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-25-1.png) 
-
-```r
-## Export plot to png file
-#dev.copy(png,file="figures/Patterns.png",width=480,height=480,res=72)
-## Close file device
-#dev.off()
-```
 
 The pattern during the weekend is more concentrated around interval 800. The pattern during the week is more spread out and shows several maxima.
 
